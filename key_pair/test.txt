@@ -1,0 +1,64 @@
+
+TAO KEY:
+ssh-keygen -t rsa -b 2048
+cuong_key_rsa
+
+=> cuong_key_rsa(private) va cuong_key_rsa.pub(public)
+
+==============================================================
+
+
+Please contact your system administrator.
+Add correct host key in /c/Users/PC/.ssh/known_hosts to get rid of this message.
+Offending ED25519 key in /c/Users/PC/.ssh/known_hosts:2
+Host key for 54.253.17.74 has changed and you have requested strict checking.
+Host key verification failed.
+FIX:
+Xóa khóa cũ khỏi known_hosts:
+Mở file known_hosts trên máy tính của bạn tại đường dẫn /c/Users/PC/.ssh/known_hosts.
+Tìm dòng chứa địa chỉ IP 54.253.17.74 (ở dòng số 2 như thông báo chỉ ra).
+Xóa dòng đó hoặc sử dụng lệnh sau để xóa dòng chứa địa chỉ IP: ssh-keygen -R 54.253.17.74
+
+Kết nối lại:
+Sau khi đã xóa khóa cũ, thử lại lệnh SSH: ssh -i "cuong_key_rsa" ec2-user@54.253.17.74
+
+==========================================================================
+curl: (7) Failed to connect to 54.253.17.74 port 80 after 149 ms: Connection refused
+Error: Process completed with exit code 7.
+FIX:
+Kiểm tra trạng thái của web server bằng cách SSH vào EC2 instance và chạy:
+Copy code
+sudo systemctl status nginx
+# hoặc
+sudo systemctl status apache2
+====
+Cài đặt Nginx:
+Trước tiên, cập nhật các gói phần mềm của hệ điều hành:
+Copy code
+sudo yum update -y
+Sau đó, cài đặt Nginx:
+Copy code
+sudo yum install nginx -y
+Nếu bạn sử dụng Ubuntu, lệnh cài đặt sẽ khác:
+Copy code
+sudo apt update
+sudo apt install nginx -y
+Khởi động và kích hoạt Nginx:
+
+Sau khi cài đặt xong, bạn cần khởi động dịch vụ Nginx và thiết lập nó để tự động khởi động cùng hệ điều hành:
+Copy code
+sudo systemctl start nginx
+sudo systemctl enable nginx
+Kiểm tra trạng thái của Nginx:
+
+Bây giờ bạn có thể kiểm tra trạng thái của Nginx:
+Copy code
+sudo systemctl status nginx
+======================================================================
+Warning: Permanently added '54.253.17.74' (ED25519) to the list of known hosts.
+tee: /var/www/html/index.nginx-debian.html: No such file or directory
+fix:
+ssh -o StrictHostKeyChecking=no -i cuong_key_rsa ${USER_NAME}@$ip '
+sudo mkdir -p /var/www/html/ &&
+echo "<h1>Hi -- This is GitHub Action Pipeline --- This is latest code with env that created by cloudformation</h1>" | sudo tee /var/www/html/index.nginx-debian.html
+'
